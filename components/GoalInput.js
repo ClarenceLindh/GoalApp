@@ -1,6 +1,8 @@
 import { useState } from "react";
 
-import { View, TextInput, Button, StyleSheet } from "react-native";
+import { View, TextInput, StyleSheet, Modal, Image } from "react-native";
+
+import Button from "./Button";
 
 function GoalInput(props) {
     const [enteredGoalText, setEnteredGoalText] = useState("");
@@ -18,37 +20,53 @@ function GoalInput(props) {
     }
 
     return (
-        <View style={styles.inputContainer}>
-            <TextInput
-                style={styles.textInput}
-                placeholder="Your goal!"
-                onChange={goalInputHandler}
-                value={enteredGoalText}
-            />
-            <Button title="Add Goal" onPress={addGoalHandler} />
-        </View>
+        <Modal visible={props.visible} animationType="slide">
+            <View style={styles.inputContainer}>
+                <TextInput
+                    style={styles.textInput}
+                    placeholder="Your goal!"
+                    onChange={goalInputHandler}
+                    value={enteredGoalText}
+                />
+                <View style={styles.buttonContainer}>
+                    <View style={styles.button}>
+                        <Button title="Cancel" onPress={props.toggleModal} />
+                    </View>
+                    <View style={styles.button}>
+                        <Button title="Add Goal" onPress={addGoalHandler} />
+                    </View>
+                </View>
+            </View>
+        </Modal>
     );
-};
+}
 
 export default GoalInput;
 
 const styles = StyleSheet.create({
     inputContainer: {
         flex: 1,
-        flexDirection: "row",
-        justifyContent: "space-between",
+        justifyContent: "center",
         alignItems: "center",
-        borderBottomWidth: 1,
-        borderBottomColor: "#ccc",
+        backgroundColor: "#102a61",
+        padding: 16,
     },
     textInput: {
-        flex: 1,
         borderWidth: 1,
         borderRadius: 5,
-        paddingHorizontal: 10,
+        paddingHorizontal: 8,
         paddingVertical: 5,
-        marginRight: 10,
-        borderColor: "#ccc",
-        width: "70%",
+        borderColor: "#a4dbf5",
+        width: "100%",
+        color: "#000000",
+        backgroundColor: "#a4dbf5",
+    },
+    buttonContainer: {
+        marginTop: 16,
+        flexDirection: "row",
+    },
+    button: {
+        width: 100,
+        marginHorizontal: 8,
     },
 });

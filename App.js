@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import { StyleSheet, View, FlatList } from "react-native";
+import { StatusBar } from "expo-status-bar";
 
 import GoalItem from "./components/GoalItem";
 import GoalInput from "./components/GoalInput";
+import Button from "./components/Button";
 
 export default function App() {
     const [goals, setGoals] = useState([]);
+    const [modalVisible, setModalVisible] = useState(false);
 
     function addGoalHandler(enteredGoalText) {
         setGoals((currentCourseGoals) => [
             ...currentCourseGoals,
             { text: enteredGoalText, id: Math.random().toString() },
         ]);
+        toggleModal();
     }
 
     function removeGoalHandler(goalId) {
@@ -21,40 +25,55 @@ export default function App() {
         });
     }
 
+    function toggleModal() {
+        setModalVisible(!modalVisible);
+    }
+
     return (
-        <View style={styles.appContainer}>
-            <GoalInput onAddGoal={addGoalHandler} />
-            <View style={styles.goalList}>
-                <FlatList
-                    data={goals}
-                    renderItem={(itemData) => {
-                        return (
-                            <GoalItem
-                                text={itemData.item.text}
-                                onDeleteItem={removeGoalHandler.bind(
-                                    this,
-                                    itemData.item.id
-                                )}
-                            />
-                        );
-                    }}
-                    keyExtractor={(item, index) => {
-                        return item.id;
-                    }}
+        <>
+            <StatusBar style="light" />
+            <View style={styles.appContainer}>
+                <Button
+                    title="Add New Goal"
+                    onPress={toggleModal}
                 />
+                <GoalInput
+                    onAddGoal={addGoalHandler}
+                    visible={modalVisible}
+                    toggleModal={toggleModal}
+                />
+                <View style={styles.goalList}>
+                    <FlatList
+                        data={goals}
+                        renderItem={(itemData) => {
+                            return (
+                                <GoalItem
+                                    text={itemData.item.text}
+                                    onDeleteItem={removeGoalHandler.bind(
+                                        this,
+                                        itemData.item.id
+                                    )}
+                                />
+                            );
+                        }}
+                        keyExtractor={(item, index) => {
+                            return item.id;
+                        }}
+                    />
+                </View>
             </View>
-        </View>
+        </>
     );
 }
 
 const styles = StyleSheet.create({
     appContainer: {
+        backgroundColor: "#102a61",
         height: "100%",
         padding: 50,
         paddingHorizontal: 16,
     },
     goalList: {
-        flex: 5,
-        paddingTop: 16,
+        paddingTop: 20,
     },
 });
