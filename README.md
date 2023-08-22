@@ -1,2 +1,2 @@
 # GoalApp
-Learning React Native
+Experementing with React Native...
